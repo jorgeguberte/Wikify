@@ -10,5 +10,9 @@
       "require":"*",
       "wikijs":"*",
     "ejs": "*"
-  }
+  },
+    "engines":{
+        "node":"0.10.x",
+        "npm":"1.2.x"
+    }
 }
