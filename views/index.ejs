@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Wikify, a Wikipedia browser</title>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc2/css/bootstrap.css"/>
+        <style>
+            .loading{
+                background-color: rgba(0,0,0,1);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Wikify</a>
+                    
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search term" id="searchTerm">
+                        </div>
+                        <button type="submit" class="btn btn-default" id="submitButton">Search</button>
+                    </form>
+                </div>
+            </nav>
+            <div id="loader" class="alert">Please wait, loading article...</div>
+            <div class="page">
+            </div><!--/page-->
+        </div><!--/container-->
+        
+        <script type="text/x-handlebars-template" id="article-template">
+            <h1>Título</h1>
+            <p>{{content}}</p>
+        </script>
+        
+        
+        
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc2/js/bootstrap.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
+    
+        <script>
+            $.ajaxPrefilter(function(options, originalOptions, jqXHR){
+            options.url = 'http://localhost:3000' + options.url;
+        });
+        
+            //Models
+            var Article = Backbone.Model.extend({
+                urlRoot: '/wiki',
+                url: function () {return this.urlRoot + "/" + encodeURIComponent(this.get("term"))}
+            });
+            //Views
+            var ArticleView = Backbone.View.extend({
+                el: '.page',
+                render: function(options){
+                    $('#loader').css('display','block');
+                    var that = this;
+                    var article = new Article({term:options.name});
+                    article.fetch({
+                        success: function(serverResponse){
+                            var data = {"data":{"bunda":"sujinha"}};
+                           /* var template = _.template($('#article-template').html(), data);
+                            that.$el.html(template);*/
+                            var source = $('#article-template').html();
+                            var template = Handlebars.compile(source);
+                            var html = template({content:serverResponse.attributes.content});
+                            $('#loader').css('display','none');
+                            that.$el.html(html);
+                        }
+                    });
+                }
+            });
+            //Router
+            var Router = Backbone.Router.extend({
+                routes: {
+                    '':'home',
+                    'wiki/:name':'getArticle'
+                }
+            });
+            var router = new Router();
+            
+            var articleView = new ArticleView();
+            router.on('route:home', function(){
+                console.log('route:home');
+            });
+            
+            router.on('route:getArticle', function(name){
+                articleView.render({name:name});
+            });
+            Backbone.history.start();
+            
+            $('#submitButton').click(function(e){
+                e.preventDefault();
+                var searchTerm = $('#searchTerm').val();
+                router.navigate('#wiki/'+searchTerm,{trigger: true});
+            });
+        </script>
+        
+    </body>
+</html>
