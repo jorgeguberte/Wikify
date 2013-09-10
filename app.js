@@ -66,9 +66,9 @@ function scaffold(req, res){
 app.all('*', function(req, res, next){
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Content-Type", "application/json");
   next();
 });
+
 app.get('/wiki/suggestions/:term', function(req, res){
         getSuggestions(res, req.params.term);
 });
