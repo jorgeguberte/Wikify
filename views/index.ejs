@@ -50,7 +50,7 @@
     
         <script>
             $.ajaxPrefilter(function(options, originalOptions, jqXHR){
-                options.url = 'http://morning-dusk-7497.herokuapp.com/' + options.url;
+                options.url = 'http://localhost:3000' + options.url;
             });
         
             //Models
@@ -117,8 +117,8 @@
             //Annyang
             if(annyang){
                 var commands = {
-                    'search': function(){
-                        console.log('Searchhhhhhh');
+                    'search *term': function(term){
+                        router.navigate('#wiki/'+term, {trigger:true});
                     },
                     'testing': function(){
                         console.log('testing');
@@ -126,7 +126,7 @@
                 }
                 annyang.debug();
                 annyang.init(commands);
-                annyang.start();
+                annyang.start({autoRestart:false});
             }
             
         </script>
