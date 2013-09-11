@@ -43,9 +43,10 @@ function getArticle(res, term){
             });
         }
     });*/
+    
     Wiki.page(term, function(err, page){
-        page.content(function(err, content){
-            var output = {content:content};
+        page.html(function(err, html){
+            var output = {content:html};
             res.send(output);
             console.timeEnd('articlefetch');
         });

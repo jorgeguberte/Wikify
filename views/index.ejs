@@ -24,7 +24,7 @@
                 </div>
             </nav>
             <div id="loader" class="alert">Please wait, loading article...</div>
-            <div class="page">
+            <div class="page" id="page">
             </div><!--/page-->
         </div><!--/container-->
         
@@ -36,7 +36,7 @@
         </script>
         <script type="text/x-handlebars-template" id="article-template">
             <h1>Título</h1>
-            <p>{{content}}</p>
+            {{{content}}}
         </script>
         
         
@@ -49,7 +49,7 @@
     
         <script>
             $.ajaxPrefilter(function(options, originalOptions, jqXHR){
-                options.url = 'http://morning-dusk-7497.herokuapp.com' + options.url;
+                options.url = 'http://localhost:3000' + options.url;
             });
         
             //Models
@@ -73,13 +73,14 @@
                     var article = new Article({term:options.name});
                     article.fetch({
                         success: function(serverResponse){
-                            var data = {"data":{"bunda":"sujinha"}};
-                           /* var template = _.template($('#article-template').html(), data);
-                            that.$el.html(template);*/
+                            var data= {content:serverResponse.attributes.content};
                             var source = $('#article-template').html();
                             var template = Handlebars.compile(source);
-                            var html = template({content:serverResponse.attributes.content});
+                            var html = template(data);
                             $('#loader').css('display','none');
+                            $('a').click(function(e){
+                return false;
+            });
                             that.$el.html(html);
                         }
                     });
@@ -110,6 +111,7 @@
                 var searchTerm = $('#searchTerm').val();
                 router.navigate('#wiki/'+searchTerm,{trigger: true});
             });
+            
         </script>
         
     </body>
