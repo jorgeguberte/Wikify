@@ -5,7 +5,6 @@
 
 var express = require('express');
 var routes = require('./routes');
-var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 
@@ -30,20 +29,6 @@ if ('development' == app.get('env')) {
 
 
 function getArticle(res, term){  
-    /*Wiki.search(term, 3, function(err, results){
-        if(!err){
-            Wiki.page(results[0], function(err, page){
-                if(!err){
-                    page.content(function(err, content){
-                        var output = {content:content};
-                        res.send(output);
-                        console.timeEnd('articlefetch');
-                    });
-                }
-            });
-        }
-    });*/
-    
     Wiki.page(term, function(err, page){
         page.html(function(err, html){
             var output = {content:html};
@@ -59,10 +44,6 @@ function getSuggestions(res, term){
         res.send(output);
     });
 };
-
-function scaffold(req, res){
-    console.log('Scaffold');
-}
 
 app.all('*', function(req, res, next){
   res.header("Access-Control-Allow-Origin", "*");
@@ -81,20 +62,12 @@ app.get('/wiki/:term', function(req, res){
     getArticle(res, req.params.term);
 });
 
-app.get('/wiki', function(req, res){
-    console.log('/wiki');
-    console.log(req.query.term);
-});
-/*
-app.get('/wiki', function(req, res){
-    console.time('articlefetch');
-    getArticle(res, req.params.name);
-});*/
 app.get('/', routes.index);
-app.get('/users', user.list);
 
 
-//app.listen(process.env.PORT || 3000);
+
+
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
