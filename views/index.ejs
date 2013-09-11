@@ -35,7 +35,7 @@
            </div>
         </script>
         <script type="text/x-handlebars-template" id="article-template">
-            <h1>Título</h1>
+            <h1>{{title}}</h1>
             {{{content}}}
         </script>
         
@@ -74,7 +74,7 @@
                     var article = new Article({term:options.name});
                     article.fetch({
                         success: function(serverResponse){
-                            var data= {content:serverResponse.attributes.content};
+                            var data= {content:serverResponse.attributes.content, title:options.name};
                             var source = $('#article-template').html();
                             var template = Handlebars.compile(source);
                             var html = template(data);
@@ -132,4 +132,4 @@
         </script>
         
     </body>
-</html>
+</html>x
