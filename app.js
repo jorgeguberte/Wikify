@@ -19,7 +19,8 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(__dirname+'/public'));
 
 var Wiki = require('wikijs');
 // development only
@@ -30,8 +31,8 @@ if ('development' == app.get('env')) {
 
 function getArticle(res, term){  
     Wiki.page(term, function(err, page){
-        page.html(function(err, html){
-            var output = {content:html};
+        page.content(function(err, content){
+            var output = {content:content};
             res.send(output);
             console.timeEnd('articlefetch');
         });

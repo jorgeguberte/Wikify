@@ -46,6 +46,7 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
+        <script src="public/javascripts/annyang.min.js"></script>
     
         <script>
             $.ajaxPrefilter(function(options, originalOptions, jqXHR){
@@ -111,6 +112,22 @@
                 var searchTerm = $('#searchTerm').val();
                 router.navigate('#wiki/'+searchTerm,{trigger: true});
             });
+            
+            
+            //Annyang
+            if(annyang){
+                var commands = {
+                    'search': function(){
+                        console.log('Searchhhhhhh');
+                    },
+                    'testing': function(){
+                        console.log('testing');
+                    }
+                }
+                annyang.debug();
+                annyang.init(commands);
+                annyang.start();
+            }
             
         </script>
         
