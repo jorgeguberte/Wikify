@@ -79,10 +79,12 @@
                             var template = Handlebars.compile(source);
                             var html = template(data);
                             $('#loader').css('display','none');
-                            $('a').click(function(e){
-                return false;
-            });
                             that.$el.html(html);
+                            
+                            $('.page a').each(function(){
+                                var href = '#'+$(this).attr('href');
+                                $(this).attr('href', href);
+                            });
                         }
                     });
                 }
