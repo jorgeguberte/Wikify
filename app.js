@@ -31,8 +31,13 @@ if ('development' == app.get('env')) {
 
 function getArticle(res, term){  
     Wiki.page(term, function(err, page){
-        page.content(function(err, content){
+        /*page.content(function(err, content){
             var output = {content:content};
+            res.send(output);
+            console.timeEnd('articlefetch');
+        });*/
+        page.html(function(err, html){
+            var output = {html:html};
             res.send(output);
             console.timeEnd('articlefetch');
         });

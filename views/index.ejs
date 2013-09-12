@@ -74,7 +74,7 @@
                     var article = new Article({term:options.name});
                     article.fetch({
                         success: function(serverResponse){
-                            var data= {content:serverResponse.attributes.content, title:options.name};
+                            var data= {content:serverResponse.attributes.html, title:options.name};
                             var source = $('#article-template').html();
                             var template = Handlebars.compile(source);
                             var html = template(data);
