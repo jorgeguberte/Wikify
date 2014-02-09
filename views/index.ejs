@@ -2,7 +2,8 @@
 <html>
     <head>
         <title>Wikify, a Wikipedia browser</title>
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc2/css/bootstrap.css"/>
+        <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.0/readable/bootstrap.min.css" rel="stylesheet">
+        <link href="public/stylesheets/style.css" rel="stylesheet">
         <style>
             #loader{
                 display: none;
@@ -14,14 +15,12 @@
             <nav class="navbar navbar-default" role="navigation">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">Wikify</a>
-                    
-                    <form class="navbar-form navbar-left" role="search">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search term" id="searchTerm">
-                        </div>
-                        <button type="submit" class="btn btn-default" id="submitButton">Search</button>
-                    </form>
                 </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><iframe src="http://ghbtns.com/github-btn.html?user=mdo&repo=github-buttons&type=fork"
+  allowtransparency="true" frameborder="0" scrolling="0" width="53" height="30"></iframe></li>
+                </ul>
+
             </nav>
             <div id="loader" class="alert">Please wait, loading article...</div>
             <div class="page" id="page">
@@ -30,8 +29,30 @@
         
         <script type="text-x-handlebars-template" id="home-template">
            <div class="jumbotron">
-            <h1>Hello!</h1>
-            <p>Enter a search term on the box above, click search and please wait.</p>
+            <h1>Explore a Wikipedia usando sua voz</h1>
+            <p>Autorize o uso do microfone, e então diga <em>Buscar</em>, seguido do termo a ser buscado.</p>
+            <p>Para rolar a página, diga <em>Rolar abaixo</em> ou <em>Rolar Acima</em></p>
+           </div>
+
+           <div  class="row">
+            <div class="col-lg-10">
+            <p class="lead">Stack</p>
+            <ul class="list-unstyled list-inline">
+                <li><span class="glyphicon glyphicon-ok"></span> <a href="http://nodejs.org/" target="_blank">Node.js</a></li>
+                <li><span class="glyphicon glyphicon-ok"></span> <a href="http://expressjs.com" target="_blank">Express</a></li>
+                <li><span class="glyphicon glyphicon-ok"></span> <a href="http://backbonejs.org/" target="_blank">Backbone.js</a></li>
+                 <li><span class="glyphicon glyphicon-ok"></span> <a href="http://jquery.org/" target="_blank">jQuery</a></li>
+                <li><span class="glyphicon glyphicon-ok"></span> <a href="https://npmjs.org/package/wikijs" target="_blank">Wikijs</a></li>
+                <li><span class="glyphicon glyphicon-ok"></span> <a href="https://www.talater.com/annyang/" target="_blank">Annyang</a></li>
+
+                <li><span class="glyphicon glyphicon-ok"></span> <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> | <a href="http://bootswatch.com/readable/" target="_blank">Tema do Bootswatch</a></li>
+                
+            </ul>
+
+            </div>
+            
+            
+            
            </div>
         </script>
         <script type="text/x-handlebars-template" id="article-template">
@@ -50,9 +71,11 @@
     
         <script>
             $.ajaxPrefilter(function(options, originalOptions, jqXHR){
-                options.url = 'http://morning-dusk-7497.herokuapp.com' + options.url;
+                //options.url = 'http://morning-dusk-7497.herokuapp.com' + options.url;
+                options.url = 'http://localhost:3000'+options.url;
             });
-        
+            
+            
             //Models
             var Article = Backbone.Model.extend({
                 urlRoot: '/wiki',
@@ -118,20 +141,27 @@
             
             //Annyang
             if(annyang){
+                annyang.setLanguage('pt-BR');
+                console.log('Annyang active');
                 var commands = {
-                    'search *term': function(term){
+                    'buscar *term': function(term){
+                        console.log('Got stuff for '+term);
                         router.navigate('#wiki/'+term, {trigger:true});
                     },
-                    'testing': function(){
-                        console.log('testing');
+                    'rolar acima': function(){
+                        console.log('Going up');
+                    },
+                    'rolar abaixo': function(){
+                        console.log('Going down');
                     }
-                }
-                annyang.debug();
-                annyang.init(commands);
-                annyang.start({autoRestart:false});
+                };
+
+                annyang.addCommands(commands);
+                annyang.start();
+
             }
             
         </script>
         
     </body>
-</html>x
+</html>

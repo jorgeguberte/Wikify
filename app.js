@@ -30,6 +30,7 @@ if ('development' == app.get('env')) {
 
 
 function getArticle(res, term){  
+  console.log('getArticle');
     Wiki.page(term, function(err, page){
         /*page.content(function(err, content){
             var output = {content:content};
@@ -45,6 +46,7 @@ function getArticle(res, term){
 }
 
 function getSuggestions(res, term){
+  console.log('getSuggestions');
     Wiki.search(term, 3, function(err, results){
         var output = {suggestions:results};
         res.send(output);
