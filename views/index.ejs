@@ -67,6 +67,7 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
+        <script src="public/javascripts/scrollTo.js"></script>
         <script src="public/javascripts/annyang.min.js"></script>
     
         <script>
@@ -142,17 +143,21 @@
             //Annyang
             if(annyang){
                 annyang.setLanguage('pt-BR');
-                console.log('Annyang active');
                 var commands = {
                     'buscar *term': function(term){
                         console.log('Got stuff for '+term);
                         router.navigate('#wiki/'+term, {trigger:true});
                     },
-                    'rolar acima': function(){
-                        console.log('Going up');
+                    'desce': function(){
+                        var scrolled = $(document).scrollTop();
+                        console.log(scrolled);
+                        $('html').scrollTo(scrolled+300);
+                        scrolled += 300;
                     },
-                    'rolar abaixo': function(){
-                        console.log('Going down');
+                    'sobe': function(){
+                        var scrolled = $(document).scrollTop();
+                        $('html').scrollTo(scrolled-300);
+                        scrolled -= 300;
                     }
                 };
 
