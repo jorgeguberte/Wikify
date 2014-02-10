@@ -9,3 +9,9 @@ a {
 	font-size: 10px;
 	display: none;
 }
+
+
+#loader{
+	position: fixed;
+	top: 0px;
+}
