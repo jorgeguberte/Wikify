@@ -7,6 +7,7 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
+var cache = require('memory-cache');
 
 var app = express();
 
@@ -31,18 +32,24 @@ if ('development' == app.get('env')) {
 
 function getArticle(res, term){  
   console.log('getArticle');
+
+  //search cache
+  console.log('Gonna search cache for '+term);
+  var output = null;
+  var cachedResult = cache.get(term);
+  if(cachedResult !== null){
+    console.log('Is in cache')
+    res.send(cachedResult);
+  }else{
+    console.log('Is not in cache');
     Wiki.page(term, function(err, page){
-        /*page.content(function(err, content){
-            var output = {content:content};
-            res.send(output);
-            console.timeEnd('articlefetch');
-        });*/
         page.html(function(err, html){
-            var output = {html:html};
+            output = {html:html};
+            cache.put(term, output);
             res.send(output);
-            console.timeEnd('articlefetch');
         });
     });
+  }
 }
 
 function getSuggestions(res, term){
